@@ -8,23 +8,28 @@ class Start extends Phaser.Scene {
 	}
 
 	create(){
-		this.image = this.add.image(400, 200, 'logo')
+		this.image = this.add.image(w / 2 , 200, 'logo')
 
 		var tconfig = {
-		     x: 400,
-		     y: 350,
-		     text: 'Press any key to start',
-		     style: {
-		       fontSize: '24px',
-		       fontFamily: 'Arial',
-		       color: '#ffffff',
-		       align: 'center',
-		       lineSpacing: 44,
-		     }
-		   };
-		   var text = this.make.text(tconfig);
-		   text.setWordWrapWidth(800, false);
-		   text.setOrigin(0.5);
+			x: w / 2,
+			y: 450,
+			text: 'Press space to start',
+			style: {
+				fontSize: '24px',
+				fontFamily: 'Arial',
+				color: '#000000',
+				align: 'center',
+				lineSpacing: 44,
+			}
+		};
+		var text = this.make.text(tconfig);
+		text.setWordWrapWidth(800, false);
+		text.setOrigin(0.5);
+
+		this.input.keyboard.on('keyup_SPACE', function(event){
+			this.scene.start('Start2')
+		}, this)
 
 	}
+
 }
