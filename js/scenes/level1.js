@@ -9,7 +9,7 @@ class Level1 extends Phaser.Scene {
 	preload(){
 
 		this.load.image("tiles", "assets/images/tiles/TilesetGrass/overworld_tileset_grass_32.png")
-		this.load.tilemapTiledJSON("map", "assets/images/maps/map1.json")
+		this.load.tilemapTiledJSON("map", "assets/images/maps/map2.json")
 		this.load.audio('theme', ['assets/audio/music/morning-sunlight.mp3'])
 		this.load.audio('walk', ['assets/audio/effects/pokemon/firered_00A2.wav'])
 		this.load.audio('walk-grass', ['assets/audio/effects/pokemon/firered_00A1.wav'])
@@ -30,10 +30,21 @@ class Level1 extends Phaser.Scene {
 		const belowLayer = map.createStaticLayer("background", tileset, 0, 0)
 		const worldLayer = map.createStaticLayer("world", tileset, 0, 0)
 
+		// the player will collide with this layer
+		worldLayer.setCollisionByExclusion([-1]);
+
+		// set the boundaries of our game world
+		this.physics.world.bounds.width = belowLayer.width;
+		this.physics.world.bounds.height = belowLayer.height;
+		
 		// Add player image, fixed to camera center of screen
 		player = this.physics.add.sprite(200, 200, 'deathcaster');
+		player.setCollideWorldBounds(true);
+
+		//add collision between player and world layer
+		this.physics.add.collider(worldLayer, player);
 		
-		// Phaser supports multiple cameras, but you can access the default camera like this:
+		// access main camera
 		const camera = this.cameras.main
 
 		// Set up the arrows to control the camera
@@ -55,7 +66,7 @@ class Level1 extends Phaser.Scene {
 		camera.startFollow(player);
 
 		// Set player walking speed
-		this.playerSpeed = 200
+		this.playerSpeed = 150
 
 	}
 
