@@ -1,6 +1,6 @@
-class Start extends Phaser.Scene {
+class StartOpen extends Phaser.Scene {
 	constructor(){
-		super({key:"Start"})
+		super({key:"StartOpen"})
 	}
 
 	preload(){
@@ -27,8 +27,11 @@ class Start extends Phaser.Scene {
 		text.setOrigin(0.5);
 
 		this.input.keyboard.on('keyup_SPACE', function(event){
-			this.scene.start('Start2')
+			this.scene.start('StartMonster')
 		}, this)
+
+
+		
 
 	}
 

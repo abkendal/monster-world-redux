@@ -13,9 +13,8 @@ const config = {
 	},
 	scene: [
 		// Preload,
-		Start,
-		Start2,
-		Start3,
+		StartOpen,
+		StartMonster,
 		Level1
 	]
 };

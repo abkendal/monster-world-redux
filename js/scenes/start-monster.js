@@ -1,6 +1,6 @@
-class Start3 extends Phaser.Scene {
+class StartMonster extends Phaser.Scene {
 	constructor(){
-		super({key:"Start3"})
+		super({key:"StartMonster"})
 	}
 
 	preload(){
@@ -33,6 +33,19 @@ class Start3 extends Phaser.Scene {
 		this.input.keyboard.on('keyup_SPACE', function(event){
 			this.scene.start('Level1')
 		}, this)
+
+
+		var rect = new Phaser.Geom.Rectangle(150, 280, 100, 5);
+		var graphics = this.add.graphics({ fillStyle: { color: 0x000000 } });
+		graphics.fillRectShape(rect);
+
+		// Set up the arrows to control the camera
+		this.cursors = this.input.keyboard.createCursorKeys()
+		let currentSelection
+
+	}
+	update(time, delta) {
+
 
 
 	}
