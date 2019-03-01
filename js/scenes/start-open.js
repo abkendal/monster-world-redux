@@ -5,7 +5,7 @@ class StartOpen extends Phaser.Scene {
 
 	preload(){
 		this.load.audio('gbstart', ['assets/audio/effects/bg-start-sound.mp3'])
-		this.load.audio('theme', ['assets/audio/music/theme.mp3'])
+		// this.load.audio('theme', ['assets/audio/music/theme.mp3'])
 		this.load.image('background', 'assets/images/backgrounds/forest800x600.jpg')
 		this.load.image('logo', 'assets/images/logo.png')
 
@@ -27,7 +27,7 @@ class StartOpen extends Phaser.Scene {
 		// this.bgmusic.play()
 
 
-		let timedEvent = this.time.delayedCall(1000, startSong, [], this);
+		
 
 		var tconfig = {
 			x: w / 2,
@@ -52,18 +52,9 @@ class StartOpen extends Phaser.Scene {
 	}
 	update(time, delta) {
 
-		if (data.openingThemeStart){
-			console.log(this)
-			this.bgmusic.play()
-			data.openingThemeStart = false
-		}
-
 	}
 }
 
-function startSong(){
-	data.openingThemeStart = true
-}
 
 
 
