@@ -2,6 +2,7 @@ html, body {
 	position: fixed;
 	height: 600px;
 	overflow-y: hidden;
+	background-color: black;
 }
 
 body {
@@ -9,6 +10,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	width: 100vw;
+	padding-top: 50px;
 }
 p {
 	/*color: white;*/

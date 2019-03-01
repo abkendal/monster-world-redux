@@ -7,7 +7,7 @@ class Level1 extends Phaser.Scene {
 
 		this.load.image("tiles", "assets/images/tiles/TilesetGrass/overworld_tileset_grass_32.png")
 		this.load.tilemapTiledJSON("map", "assets/images/maps/map3.json")
-		this.load.audio('theme', ['assets/audio/music/morning-sunlight.mp3'])
+		this.load.audio('morning-sunlight', ['assets/audio/music/morning-sunlight.mp3'])
 		this.load.audio('walk', ['assets/audio/effects/pokemon/firered_00A2.wav'])
 		this.load.audio('walk-grass', ['assets/audio/effects/pokemon/firered_00A1.wav'])
 		this.load.spritesheet('mummy', 'assets/images/characters/metalslug_mummy37x45.png', { frameWidth: 37, frameHeight: 45 })
@@ -72,10 +72,10 @@ class Level1 extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys()
 
 		// Set up music
-		const bgmusic = this.sound.add('theme')
-		bgmusic.loop = true
-		bgmusic.volume = 0.2
-		bgmusic.play()
+		this.bgmusic = this.sound.add('morning-sunlight')
+		this.bgmusic.loop = true
+		this.bgmusic.volume = 0.2
+		this.bgmusic.play()
 
 		// Sound effects
 		this.walkSound = this.sound.add('walk')
@@ -142,8 +142,16 @@ class Level1 extends Phaser.Scene {
 			player.anims.play('walk', false)
 		}
 
+		// Check if player is walking in any direction
 		if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
 			data.walking = true
+
+			// Switch to encounter level if encounter triggered while walking
+			if (data.startEncounter){
+				data.startEncounter = false
+				this.bgmusic.stop()
+				this.scene.start('Encounter')
+			}
 		}
 		else {
 			data.walking = false

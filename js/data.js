@@ -1,6 +1,10 @@
 let data = {
 	initialMonster:'',
 	grassOverlap:'',
-	walking:''
+	walking:'',
+	startEncounter: false,
+	monsterInv: [],
+	itemInv: [],
 
 }
+

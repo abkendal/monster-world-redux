@@ -15,7 +15,9 @@ const config = {
 		// Preload,
 		StartOpen,
 		StartMonster,
-		Level1
+		Level1,
+		Encounter,
+		Battle,
 	]
 };
 

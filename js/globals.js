@@ -3,8 +3,12 @@ let player
 
 function encounter (sprite, tile) {
 	if (data.walking){
-		console.log('hit')
+		const rand = Math.random()
+		if (rand > 0.992) {
+			data.startEncounter = true
+		}
 	}
 
 	// return true
 }
+
