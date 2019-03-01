@@ -7,7 +7,6 @@ class Level1 extends Phaser.Scene {
 
 		this.load.image("tiles", "assets/images/tiles/TilesetGrass/overworld_tileset_grass_32.png")
 		this.load.tilemapTiledJSON("map", "assets/images/maps/map3.json")
-		this.load.audio('morning-sunlight', ['assets/audio/music/morning-sunlight.mp3'])
 		this.load.audio('walk', ['assets/audio/effects/pokemon/firered_00A2.wav'])
 		this.load.audio('walk-grass', ['assets/audio/effects/pokemon/firered_00A1.wav'])
 		this.load.spritesheet('mummy', 'assets/images/characters/metalslug_mummy37x45.png', { frameWidth: 37, frameHeight: 45 })
@@ -16,6 +15,11 @@ class Level1 extends Phaser.Scene {
 
 
 	create(){
+
+		// Set level music
+		let music = this.scene.get('Music')
+		music.theme.stop()
+		music.morningSunlight.play()
 
 		// World
 		const map = this.make.tilemap({ 
@@ -71,12 +75,6 @@ class Level1 extends Phaser.Scene {
 		// Set up the arrows to control the camera
 		this.cursors = this.input.keyboard.createCursorKeys()
 
-		// Set up music
-		this.bgmusic = this.sound.add('morning-sunlight')
-		this.bgmusic.loop = true
-		this.bgmusic.volume = 0.2
-		this.bgmusic.play()
-
 		// Sound effects
 		this.walkSound = this.sound.add('walk')
 
@@ -93,11 +91,6 @@ class Level1 extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-
-		// if (this.cursors.left.isDown){
-		// 	this.walkSound.play()
-		// }
-
 
 		// Movement controls
 		// X velocity
@@ -149,7 +142,6 @@ class Level1 extends Phaser.Scene {
 			// Switch to encounter level if encounter triggered while walking
 			if (data.startEncounter){
 				data.startEncounter = false
-				this.bgmusic.stop()
 				this.scene.start('Encounter')
 			}
 		}

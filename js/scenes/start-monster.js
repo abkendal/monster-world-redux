@@ -13,9 +13,11 @@ class StartMonster extends Phaser.Scene {
 	}
 
 	create(){
-		console.log(this)
+		
+		// Background image
 		this.bgimage = this.add.image(w / 2, h / 2, 'background')
 		this.bgimage.setDisplaySize(w, h)
+
 		// Monster images
 		this.image = this.add.image(200, 200, 'monster1')
 		this.image2 = this.add.image(400, 200, 'monster2')

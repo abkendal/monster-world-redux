@@ -12,8 +12,7 @@ const config = {
 		}
 	},
 	scene: [
-		// Preload,
-		Music,
+		StartOpen,
 		StartMonster,
 		Level1,
 		Encounter,

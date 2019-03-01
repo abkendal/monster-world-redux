@@ -5,26 +5,27 @@ class Music extends Phaser.Scene {
 
 	preload(){
 		this.load.audio('theme', ['assets/audio/music/theme.mp3'])
+		this.load.audio('morning-sunlight', ['assets/audio/music/morning-sunlight.mp3'])
 	}	
 
 
 	create(){
 
-		this.bgmusic = this.sound.add('theme')
-		this.bgmusic.loop = true
-		this.bgmusic.volume = 0.2
-		// this.bgmusic.play()
+		this.theme = this.sound.add('theme')
+		this.theme.loop = true
+		this.theme.volume = 0.2
 
-		let key = 'StartOpen'
-		let opened = new StartOpen(key)
-		this.scene.add(key, opened, true)
+		this.morningSunlight = this.sound.add('morning-sunlight')
+		this.morningSunlight.loop = true
+		this.morningSunlight.volume = 0.5
 
-		let timedEvent = this.time.delayedCall(1000, startSong, [], this);
+		// Start song after 1 second
+		const timedEvent = this.time.delayedCall(850, startSong, [], this);
 	}
 
 	update(time, delta) {
 		if (data.openingThemeStart){
-			this.bgmusic.play()
+			this.theme.play()
 			data.openingThemeStart = false
 		}
 
