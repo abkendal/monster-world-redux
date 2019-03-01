@@ -9,7 +9,6 @@ class StartMonster extends Phaser.Scene {
 		this.load.image('monster3', 'assets/images/monsters/Beholder1.png')
 		this.load.image('selector', 'assets/images/box-selector.png')
 		this.load.audio('cursorSound', ['assets/audio/effects/gameboy/mp3/cw_sound35.mp3'])
-
 	}
 
 	create(){
@@ -48,6 +47,7 @@ class StartMonster extends Phaser.Scene {
 		this.selector = this.add.image(200, 200, 'selector')
 		this.selector.setScale(0.8)
 
+		// Starting monsters
 		const starterMonster = [
 			'Eyeball',
 			'Beep',
@@ -59,7 +59,6 @@ class StartMonster extends Phaser.Scene {
 		this.starterSelect = 1
 
 		// Controls
-
 		// Left: move selector left
 		this.cursors.left.on('down', function(){
 			if (this.starterSelect === 3 || this.starterSelect === 2) {

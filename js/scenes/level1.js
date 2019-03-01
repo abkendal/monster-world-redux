@@ -28,6 +28,7 @@ class Level1 extends Phaser.Scene {
 
 		const tileset = map.addTilesetImage("tiles", "tiles")
 
+		// Set map layers
 		const belowLayer = map.createDynamicLayer("background", tileset, 0, 0)
 		const worldLayer = map.createDynamicLayer("world", tileset, 0, 0)
 		const grassLayer = map.createDynamicLayer("grass", tileset, 0, 0)
@@ -38,12 +39,10 @@ class Level1 extends Phaser.Scene {
 		// the player will collide with this layer
 		worldLayer.setCollisionByExclusion([-1])
 
-
 		// set the boundaries of our game world
 		this.physics.world.bounds.width = belowLayer.width
 		this.physics.world.bounds.height = belowLayer.height
 		
-
 
 		// Player
 		// Add player image, fixed to camera center of screen
@@ -66,8 +65,6 @@ class Level1 extends Phaser.Scene {
 			repeat: -1
 		})
 		
-
-
 
 		// access main camera
 		const camera = this.cameras.main
