@@ -1,4 +1,7 @@
-class StartMonster extends Phaser.Scene {
+// import {Monsters} from './../modules/monsters/monsters'
+import Batball from './../modules/monsters/batball'
+
+export class StartMonster extends Phaser.Scene {
 	constructor(){
 		super({key:"StartMonster"})
 	}
@@ -12,7 +15,6 @@ class StartMonster extends Phaser.Scene {
 	}
 
 	create(){
-		
 		// Background image
 		this.bgimage = this.add.image(w / 2, h / 2, 'background')
 		this.bgimage.setDisplaySize(w, h)
@@ -49,7 +51,7 @@ class StartMonster extends Phaser.Scene {
 
 		// Starting monsters
 		const starterMonster = [
-			'Eyeball',
+			new Batball(1),
 			'Beep',
 			'Beholder'
 		]
@@ -89,7 +91,7 @@ class StartMonster extends Phaser.Scene {
 				data.monsterInv.push(starterMonster[2])
 			}
 			console.log(data.monsterInv)
-			this.scene.start('Level1')
+			this.scene.start('Overworld')
 		}, this)
 
 

@@ -11,10 +11,12 @@ class Music extends Phaser.Scene {
 
 	create(){
 
+		// Theme
 		this.theme = this.sound.add('theme')
 		this.theme.loop = true
 		this.theme.volume = 0.2
 
+		// Morning Sun
 		this.morningSunlight = this.sound.add('morning-sunlight')
 		this.morningSunlight.loop = true
 		this.morningSunlight.volume = 0.5

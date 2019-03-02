@@ -1,6 +1,6 @@
-class Level1 extends Phaser.Scene {
+export class Overworld extends Phaser.Scene {
 	constructor(){
-		super({key:"Level1"})
+		super({key:"Overworld"})
 	}
 
 	preload(){
@@ -136,7 +136,7 @@ class Level1 extends Phaser.Scene {
 		if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
 			data.walking = true
 
-			// Switch to encounter level if encounter triggered while walking
+			// Switch to encounter level if encounter triggered while walking 
 			if (data.startEncounter){
 				data.startEncounter = false
 				this.scene.start('Encounter')
@@ -149,7 +149,15 @@ class Level1 extends Phaser.Scene {
 	}
 }
 
-
+// Random monster encoounter
+function encounter (sprite, tile) {
+	if (data.walking){
+		const rand = Math.random()
+		if (rand > 0.992) {
+			data.startEncounter = true
+		}
+	}
+}
 
 
 

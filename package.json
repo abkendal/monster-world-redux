@@ -1,0 +1,28 @@
+{
+  "name": "monster-world-redux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "webpack": "^4.29.6"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.2.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run webpack",
+    "webpack": "webpack -d --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamkendalnfa/monster-world-redux.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamkendalnfa/monster-world-redux/issues"
+  },
+  "homepage": "https://github.com/adamkendalnfa/monster-world-redux#readme"
+}

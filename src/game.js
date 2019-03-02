@@ -1,5 +1,9 @@
-const w = 800
-const h = 600
+
+
+import { StartOpen } from './scenes/start-open.js'
+import { StartMonster } from './scenes/start-monster.js'
+import { Overworld } from './scenes/overworld.js'
+
 const config = {
 	type: Phaser.AUTO,
 	width: w,
@@ -14,7 +18,7 @@ const config = {
 	scene: [
 		StartOpen,
 		StartMonster,
-		Level1,
+		Overworld,
 		Encounter,
 		Battle,
 	]
