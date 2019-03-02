@@ -1,4 +1,4 @@
-class Music extends Phaser.Scene {
+export class Music extends Phaser.Scene {
 	constructor(){
 		super({key:"Music"})
 	}
@@ -6,6 +6,7 @@ class Music extends Phaser.Scene {
 	preload(){
 		this.load.audio('theme', ['assets/audio/music/theme.mp3'])
 		this.load.audio('morning-sunlight', ['assets/audio/music/morning-sunlight.mp3'])
+		this.load.audio('wild-encounter', ['assets/audio/music/wild-encounter.mp3'])
 	}	
 
 
@@ -21,7 +22,12 @@ class Music extends Phaser.Scene {
 		this.morningSunlight.loop = true
 		this.morningSunlight.volume = 0.5
 
-		// Start song after 1 second
+		// Wild Encounter
+		this.wildEncounter = this.sound.add('wild-encounter')
+		this.wildEncounter.loop = true
+		this.wildEncounter.volume = 0.5
+
+		// Start initial song 1 second after game loads
 		const timedEvent = this.time.delayedCall(850, startSong, [], this);
 	}
 

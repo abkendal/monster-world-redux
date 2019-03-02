@@ -1,5 +1,8 @@
-// import {Monsters} from './../modules/monsters/monsters'
-import Batball from './../modules/monsters/batball'
+import { Music } from './music.js'
+
+import Batball from './../monsters/batball'
+import Beep from './../monsters/beep'
+import Beholder from './../monsters/beholder'
 
 export class StartMonster extends Phaser.Scene {
 	constructor(){
@@ -26,6 +29,7 @@ export class StartMonster extends Phaser.Scene {
 
 		// Sound effects
 		this.cursorSound = this.sound.add('cursorSound')
+		this.cursorSound.volume = 0.6
 
 		// Text
 		var tconfig = {
@@ -52,8 +56,8 @@ export class StartMonster extends Phaser.Scene {
 		// Starting monsters
 		const starterMonster = [
 			new Batball(1),
-			'Beep',
-			'Beholder'
+			new Beep(1),
+			new Beholder(1)
 		]
 
 		// Set up the arrows to control selector box

@@ -1,3 +1,5 @@
+import { Music } from './music.js'
+
 export class StartOpen extends Phaser.Scene {
 	constructor(){
 		super({key:"StartOpen"})

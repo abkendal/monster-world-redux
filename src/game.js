@@ -1,8 +1,7 @@
-
-
-import { StartOpen } from './scenes/start-open.js'
-import { StartMonster } from './scenes/start-monster.js'
-import { Overworld } from './scenes/overworld.js'
+import { StartOpen } from './modules/scenes/start-open.js'
+import { StartMonster } from './modules/scenes/start-monster.js'
+import { Overworld } from './modules/scenes/overworld.js'
+import { Battle } from './modules/scenes/battle.js'
 
 const config = {
 	type: Phaser.AUTO,
@@ -19,7 +18,6 @@ const config = {
 		StartOpen,
 		StartMonster,
 		Overworld,
-		Encounter,
 		Battle,
 	]
 };
