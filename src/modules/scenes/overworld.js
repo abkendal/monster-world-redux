@@ -6,6 +6,7 @@ export class Overworld extends Phaser.Scene {
 	preload(){
 
 		this.load.image("tiles", "assets/images/tiles/TilesetGrass/overworld_tileset_grass_32.png")
+		this.load.image("black", "assets/images/black.jpg")
 		this.load.tilemapTiledJSON("map", "assets/images/maps/map3.json")
 		this.load.audio('walk', ['assets/audio/effects/pokemon/firered_00A2.wav'])
 		this.load.audio('walk-grass', ['assets/audio/effects/pokemon/firered_00A1.wav'])
@@ -13,12 +14,10 @@ export class Overworld extends Phaser.Scene {
 
 	}	
 
-
 	create(){
 
 		// Set level music
 		let music = this.scene.get('Music')
-		music.theme.stop()
 		music.morningSunlight.play()
 
 		// World
@@ -64,6 +63,20 @@ export class Overworld extends Phaser.Scene {
 			frameRate: 10,
 			repeat: -1
 		})
+
+		// Tween encounter flash
+		const blackScreen = this.add.image(w / 2, h / 2, 'black')
+		blackScreen.alpha = 0
+		this.tween = this.tweens.add({
+		        targets: blackScreen,
+		        alpha: 1,
+		        duration: 400,
+		        ease: 'Linear',
+		        yoyo: true,
+		        repeat: -1,
+		        paused: true
+		    });
+		
 		
 
 		// access main camera
@@ -82,8 +95,7 @@ export class Overworld extends Phaser.Scene {
 		camera.startFollow(player)
 
 		// Set player walking speed
-		this.playerSpeed = 120
-
+		this.playerSpeed = 50
 
 	}
 
@@ -139,7 +151,12 @@ export class Overworld extends Phaser.Scene {
 			// Switch to encounter level if encounter triggered while walking 
 			if (data.startEncounter){
 				data.startEncounter = false
-				this.scene.start('Encounter')
+				let music = this.scene.get('Music')
+				music.morningSunlight.stop()
+				music.wildEncounter.play()
+				this.tween.play()
+
+				// this.scene.start('Encounter')
 			}
 		}
 		else {
@@ -150,7 +167,7 @@ export class Overworld extends Phaser.Scene {
 }
 
 // Random monster encoounter
-function encounter (sprite, tile) {
+function encounter () {
 	if (data.walking){
 		const rand = Math.random()
 		if (rand > 0.992) {

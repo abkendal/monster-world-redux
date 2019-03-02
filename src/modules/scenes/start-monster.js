@@ -1,4 +1,3 @@
-import { Music } from './music.js'
 
 import Batball from './../monsters/batball'
 import Beep from './../monsters/beep'
@@ -29,7 +28,7 @@ export class StartMonster extends Phaser.Scene {
 
 		// Sound effects
 		this.cursorSound = this.sound.add('cursorSound')
-		this.cursorSound.volume = 0.6
+		this.cursorSound.volume = 0.4
 
 		// Text
 		var tconfig = {
@@ -95,6 +94,8 @@ export class StartMonster extends Phaser.Scene {
 				data.monsterInv.push(starterMonster[2])
 			}
 			console.log(data.monsterInv)
+			let music = this.scene.get('Music')
+			music.theme.stop()
 			this.scene.start('Overworld')
 		}, this)
 

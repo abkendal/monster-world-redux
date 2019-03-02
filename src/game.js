@@ -1,3 +1,4 @@
+
 import { StartOpen } from './modules/scenes/start-open.js'
 import { StartMonster } from './modules/scenes/start-monster.js'
 import { Overworld } from './modules/scenes/overworld.js'

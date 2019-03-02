@@ -28,7 +28,7 @@ export class Music extends Phaser.Scene {
 		this.wildEncounter.volume = 0.5
 
 		// Start initial song 1 second after game loads
-		const timedEvent = this.time.delayedCall(850, startSong, [], this);
+		const timedEvent = this.time.delayedCall(500, startSong, [], this);
 	}
 
 	update(time, delta) {
