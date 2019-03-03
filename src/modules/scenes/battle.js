@@ -19,7 +19,10 @@ export class Battle extends Phaser.Scene {
 
 		this.enemyImage = enemy.image
 		this.playerImage = this.add.sprite(w + 100, 500, 'mummy').setScale(3)
+		this.lightningSprite = this.add.sprite(310, 475, 'lightning')
+		this.lightningSprite.alpha = 0
 
+		// Animate enemy onto screen
 		this.enemyTween = this.tweens.add({
 			targets: this.enemyImage,
 			x: 650,
@@ -27,19 +30,36 @@ export class Battle extends Phaser.Scene {
 			ease: 'Linear',
 		}, this);
 
+		// Make lightning appear
+		this.lightningIn = this.tweens.add({
+			targets: this.lightningSprite,
+			alpha: 1,
+			duration: 1,
+			ease: 'Linear',
+			paused: true
+		})
+
+		this.playerOut = this.tweens.add({
+			targets: [this.playerImage, this.lightningSprite],
+			x: -100,
+			duration: 1500,
+			ease: 'Linear',
+			paused: true
+		})
+
+		// Animate player onto the screen
 		this.playerTween = this.tweens.add({
 			targets: this.playerImage,
 			x: 150,
 			duration: 1700,
 			ease: 'Linear',
-			onComplete: function(){
-				this.lightningSprite = this.add.sprite(50, 300, 'lightning')
-				this.lightningSprite.play('summon')
-			}
+			onComplete: lightningSummon,
+			onCompleteParams: [ this.lightningSprite, this.lightningIn, this.playerOut ]
 		});
 
+		
 
-		// Walk animation
+		// Summon lightning animation
 		this.anims.create({
 			key: 'summon',
 			frames: this.anims.generateFrameNumbers('lightning', { start: 0, end: 2 }),
@@ -59,10 +79,17 @@ export class Battle extends Phaser.Scene {
 	}
 }
 
+function lightningSummon (tween, targets, image, lightningIn, playerOut) {
+	lightningIn.play()
+	image.play('summon')
+	setTimeout(function() { 
+		playerOutTween(playerOut)
+	 }, 1500, playerOut);
+}
 
-
-
-
+function playerOutTween (playerOut){
+	playerOut.play()
+}
 
 
 
