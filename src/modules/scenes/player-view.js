@@ -60,7 +60,7 @@ export class PlayerView extends Phaser.Scene {
 		
 
 		// Player
-		// Add player image, fixed to camera center of screen
+		// Add player image
 		player = this.physics.add.sprite(200, 200, 'mummy')
 
 		// Prevent player from walking off screen
@@ -84,14 +84,14 @@ export class PlayerView extends Phaser.Scene {
 		const blackScreen = this.add.image(w / 2, h / 2, 'black')
 		blackScreen.alpha = 0
 		this.tween = this.tweens.add({
-		        targets: blackScreen,
-		        alpha: 1,
-		        duration: 400,
-		        ease: 'Linear',
-		        yoyo: true,
-		        repeat: -1,
-		        paused: true
-		    });
+			targets: blackScreen,
+			alpha: 1,
+			duration: 400,
+			ease: 'Linear',
+			yoyo: true,
+			repeat: -1,
+			paused: true
+		});
 		
 		
 

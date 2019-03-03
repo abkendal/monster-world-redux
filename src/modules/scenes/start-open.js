@@ -10,6 +10,8 @@ export class StartOpen extends Phaser.Scene {
 		this.load.image('background', 'assets/images/backgrounds/forest800x600.jpg')
 		this.load.image('logo', 'assets/images/logo.png')
 
+		this.load.image('Beep', 'assets/images/monsters/Beep.png')
+
 	}
 
 	create(){
@@ -46,6 +48,7 @@ export class StartOpen extends Phaser.Scene {
 
 		this.input.keyboard.on('keyup_SPACE', function(event){
 			this.scene.start('StartMonster')
+			// this.scene.start('Battle')
 		}, this)
 	}
 	update(time, delta) {
