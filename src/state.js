@@ -6,7 +6,6 @@ let state = {
 	monsterInv: [],
 	itemInv: [],
 	encounterMonster:'',
-	
 }
 
 const w = 800
