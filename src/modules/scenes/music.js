@@ -6,7 +6,7 @@ export class Music extends Phaser.Scene {
 	preload(){
 		this.load.audio('theme', ['assets/audio/music/theme.mp3'])
 		this.load.audio('morning-sunlight', ['assets/audio/music/morning-sunlight.mp3'])
-		this.load.audio('wild-encounter', ['assets/audio/music/wild-encounter.mp3'])
+		this.load.audio('wild-encounter', ['assets/audio/music/battle1.mp3'])
 	}	
 
 
@@ -28,13 +28,13 @@ export class Music extends Phaser.Scene {
 		this.wildEncounter.volume = 0.5
 
 		// Start initial song 1 second after game loads
-		const timedEvent = this.time.delayedCall(500, startSong, [], this);
+		const timedEvent = this.time.delayedCall(0, startSong, [], this);
 	}
 
 	update(time, delta) {
-		if (data.openingThemeStart){
+		if (state.openingThemeStart){
 			this.theme.play()
-			data.openingThemeStart = false
+			state.openingThemeStart = false
 		}
 
 	}
@@ -42,5 +42,5 @@ export class Music extends Phaser.Scene {
 }
 
 function startSong(){
-	data.openingThemeStart = true
+	state.openingThemeStart = true
 }

@@ -1,4 +1,4 @@
-class Battle extends Phaser.Scene {
+export class Battle extends Phaser.Scene {
 	constructor(){
 		super({key:"Battle"})
 	}

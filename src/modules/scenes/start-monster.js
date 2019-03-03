@@ -85,18 +85,18 @@ export class StartMonster extends Phaser.Scene {
 		// Space: Select starting monster and move on to next scene
 		this.input.keyboard.on('keyup_SPACE', function(event){
 			if (this.starterSelect === 1){
-				data.monsterInv.push(starterMonster[0])
+				state.monsterInv.push(starterMonster[0])
 			}
 			else if (this.starterSelect === 2){
-				data.monsterInv.push(starterMonster[1])
+				state.monsterInv.push(starterMonster[1])
 			}
 			else if (this.starterSelect === 3){
-				data.monsterInv.push(starterMonster[2])
+				state.monsterInv.push(starterMonster[2])
 			}
-			console.log(data.monsterInv)
 			let music = this.scene.get('Music')
 			music.theme.stop()
-			this.scene.start('Overworld')
+			// this.scene.start('Overworld')
+			this.scene.start('PlayerView', {level: 'overworld1'})
 		}, this)
 
 

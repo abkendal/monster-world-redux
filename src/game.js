@@ -1,7 +1,7 @@
 
 import { StartOpen } from './modules/scenes/start-open.js'
 import { StartMonster } from './modules/scenes/start-monster.js'
-import { Overworld } from './modules/scenes/overworld.js'
+import { PlayerView } from './modules/scenes/player-view.js'
 import { Battle } from './modules/scenes/battle.js'
 
 const config = {
@@ -18,7 +18,7 @@ const config = {
 	scene: [
 		StartOpen,
 		StartMonster,
-		Overworld,
+		PlayerView,
 		Battle,
 	]
 };

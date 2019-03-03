@@ -3,7 +3,7 @@ import Monster from './monsters';
 import elementalTypes from './../elemental-types';
 
 const hpMultiplier = 1;
-const attackMultiplier = 500;
+const attackMultiplier = 2;
 const defenseMultiplier = 1;
 const spAttackMultiplier = 1;
 const spDefenseMultiplier = 1;

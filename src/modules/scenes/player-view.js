@@ -1,11 +1,15 @@
-export class Overworld extends Phaser.Scene {
+import Batball from './../monsters/batball'
+import Beep from './../monsters/beep'
+import Beholder from './../monsters/beholder'
+
+export class PlayerView extends Phaser.Scene {
 	constructor(){
-		super({key:"Overworld"})
+		super({key:"PlayerView"})
 	}
 
 	preload(){
 
-		this.load.image("tiles", "assets/images/tiles/TilesetGrass/overworld_tileset_grass_32.png")
+		this.load.image("overworld-grass-tiles", "assets/images/tiles/TilesetGrass/overworld_tileset_grass_32.png")
 		this.load.image("black", "assets/images/black.jpg")
 		this.load.tilemapTiledJSON("map", "assets/images/maps/map3.json")
 		this.load.audio('walk', ['assets/audio/effects/pokemon/firered_00A2.wav'])
@@ -14,18 +18,30 @@ export class Overworld extends Phaser.Scene {
 
 	}	
 
-	create(){
+	create(data){
 
-		// Set level music
+
+		
 		let music = this.scene.get('Music')
-		music.morningSunlight.play()
+		let mapkey
+		let tilekey
+		let monsterLvl 
+		let monsters
+
+		if (data.level === 'overworld1'){
+			music.morningSunlight.play()
+			mapkey = 'map'
+			tilekey = 'overworld-grass-tiles'
+			monsterLvl = [1,2,3]
+			monsters = [Batball, Beep, Beholder]
+		}
 
 		// World
 		const map = this.make.tilemap({ 
-			key: "map" 
+			key: mapkey
 		})
-
-		const tileset = map.addTilesetImage("tiles", "tiles")
+		const tileset = map.addTilesetImage("tiles", tilekey)
+		
 
 		// Set map layers
 		const belowLayer = map.createDynamicLayer("background", tileset, 0, 0)
@@ -33,7 +49,7 @@ export class Overworld extends Phaser.Scene {
 		const grassLayer = map.createDynamicLayer("grass", tileset, 0, 0)
 
 		// Set encounter callback to grass tiles
-		grassLayer.setTileIndexCallback(167, encounter, this)
+		grassLayer.setTileIndexCallback(167, encounterRand, this)
 
 		// the player will collide with this layer
 		worldLayer.setCollisionByExclusion([-1])
@@ -95,7 +111,7 @@ export class Overworld extends Phaser.Scene {
 		camera.startFollow(player)
 
 		// Set player walking speed
-		this.playerSpeed = 50
+		this.playerSpeed = 100
 
 	}
 
@@ -146,36 +162,42 @@ export class Overworld extends Phaser.Scene {
 
 		// Check if player is walking in any direction
 		if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
-			data.walking = true
+			state.walking = true
 
 			// Switch to encounter level if encounter triggered while walking 
-			if (data.startEncounter){
-				data.startEncounter = false
+			if (state.startEncounter){
+				state.startEncounter = false
 				let music = this.scene.get('Music')
 				music.morningSunlight.stop()
 				music.wildEncounter.play()
 				this.tween.play()
+				const timedEvent = this.time.delayedCall(2000, startEncounter, [], this);
 
 				// this.scene.start('Encounter')
 			}
 		}
 		else {
-			data.walking = false
+			state.walking = false
 		}
 
 	}
 }
 
-// Random monster encoounter
-function encounter () {
-	if (data.walking){
+// Random monster encounter
+function encounterRand () {
+	if (state.walking){
 		const rand = Math.random()
 		if (rand > 0.992) {
-			data.startEncounter = true
+			state.startEncounter = true
+			state.encounterMonster = new Beep(1)
 		}
 	}
 }
 
+// Move to encounter scene, function used for delayed event
+function startEncounter(){
+	this.scene.start('Battle', {type: 'encounter'})
+}
 
 
 

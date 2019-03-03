@@ -1,10 +1,11 @@
--add animation/tween to into page
--add info sceen before monster select scene
+
 -walking sound
 -battle stage
--menu
+-menu stage (run in parallel)
 -additional levels, inside buildings/towns
 -map triggers for level transition
+-add animation/tween to into page
+-add info sceen before monster select scene
 
 
 Main functional components to do:

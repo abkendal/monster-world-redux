@@ -1,4 +1,4 @@
-let data = {
+let state = {
 	initialMonster:'',
 	grassOverlap:'',
 	walking:'',
