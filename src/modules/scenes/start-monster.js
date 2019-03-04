@@ -9,9 +9,9 @@ export class StartMonster extends Phaser.Scene {
 	}
 
 	preload(){
-		this.load.image('monster1', 'assets/images/monsters/BatBall1.png')
-		this.load.image('monster2', 'assets/images/monsters/Beep.png')
-		this.load.image('monster3', 'assets/images/monsters/Beholder1.png')
+		this.load.image('Batball', 'assets/images/monsters/BatBall1.png')
+		this.load.image('Beep', 'assets/images/monsters/Beep.png')
+		this.load.image('Beholder', 'assets/images/monsters/Beholder1.png')
 		this.load.image('selector', 'assets/images/box-selector.png')
 		this.load.audio('cursorSound', ['assets/audio/effects/gameboy/mp3/cw_sound35.mp3'])
 	}
@@ -22,9 +22,9 @@ export class StartMonster extends Phaser.Scene {
 		this.bgimage.setDisplaySize(w, h)
 
 		// Monster images
-		this.image = this.add.image(200, 200, 'monster1')
-		this.image2 = this.add.image(400, 200, 'monster2')
-		this.image3 = this.add.image(600, 200, 'monster3')
+		this.image = this.add.image(200, 200, 'Batball')
+		this.image2 = this.add.image(400, 200, 'Beep')
+		this.image3 = this.add.image(600, 200, 'Beholder')
 
 		// Sound effects
 		this.cursorSound = this.sound.add('cursorSound')

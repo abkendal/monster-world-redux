@@ -10,11 +10,21 @@ export class Battle extends Phaser.Scene {
 
 
 	create(data){
-		let enemy = {}
+		
+		// Get player data, monsters in inventory 
+		let hero = {}
+		hero.monster = state.monsterInv
+		this.monsterImg = this.add.image(150, 500, hero.monster[0].name)
+		this.monsterImg.alpha = 0
 
+
+		let enemy = {}
 		if (data.type === 'encounter'){
 			enemy.monsters = [state.encounterMonster]
 			enemy.image = this.add.image(-100 , 100, enemy.monsters[0].name)
+		}
+		else if (data.type === 'battle'){
+
 		}
 
 		this.enemyImage = enemy.image
@@ -39,11 +49,21 @@ export class Battle extends Phaser.Scene {
 			paused: true
 		})
 
+		// Move player sprite and lightning off the screen
 		this.playerOut = this.tweens.add({
 			targets: [this.playerImage, this.lightningSprite],
 			x: -100,
 			duration: 1500,
 			ease: 'Linear',
+			paused: true
+		})
+
+		// Fade monster in
+		this.monsterIn = this.tweens.add({
+			targets: this.monsterImg,
+			alpha: 1,
+			duration: 1500,
+			ease: "Linear",
 			paused: true
 		})
 
@@ -54,10 +74,8 @@ export class Battle extends Phaser.Scene {
 			duration: 1700,
 			ease: 'Linear',
 			onComplete: lightningSummon,
-			onCompleteParams: [ this.lightningSprite, this.lightningIn, this.playerOut ]
+			onCompleteParams: [ this.lightningSprite, this.lightningIn, this.playerOut, this.monsterIn ]
 		});
-
-		
 
 		// Summon lightning animation
 		this.anims.create({
@@ -79,18 +97,18 @@ export class Battle extends Phaser.Scene {
 	}
 }
 
-function lightningSummon (tween, targets, image, lightningIn, playerOut) {
+function lightningSummon (tween, targets, image, lightningIn, playerOut, monsterIn) {
 	lightningIn.play()
 	image.play('summon')
+
 	setTimeout(function() { 
-		playerOutTween(playerOut)
-	 }, 1500, playerOut);
-}
+		playerOut.play()
+	 }, 1500, playerOut)
 
-function playerOutTween (playerOut){
-	playerOut.play()
+	setTimeout(function() { 
+		monsterIn.play()
+	 }, 1500, monsterIn)
 }
-
 
 
 
