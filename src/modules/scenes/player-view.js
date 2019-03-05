@@ -172,8 +172,6 @@ export class PlayerView extends Phaser.Scene {
 				music.wildEncounter.play()
 				this.tween.play()
 				const timedEvent = this.time.delayedCall(2000, startEncounter, [], this);
-
-				// this.scene.start('Encounter')
 			}
 		}
 		else {

@@ -5,7 +5,7 @@ export class Battle extends Phaser.Scene {
 
 	preload(){
 		this.load.spritesheet('lightning', 'assets/images/effects/lightning.png', { frameWidth: 235, frameHeight: 75 })
-
+		this.load.image('arrow', 'assets/images/icons/arrow2.png')
 	}	
 
 
@@ -13,9 +13,7 @@ export class Battle extends Phaser.Scene {
 		
 		// Get player data, monsters in inventory 
 		let hero = {}
-		hero.monster = state.monsterInv
-		this.monsterImg = this.add.image(150, 500, hero.monster[0].name)
-		this.monsterImg.alpha = 0
+		hero.monsters = state.monsterInv
 
 
 		let enemy = {}
@@ -27,10 +25,20 @@ export class Battle extends Phaser.Scene {
 
 		}
 
+		enemy.currentMonster = enemy.monsters[0]
+		enemy.currentHP = enemy.currentMonster.hp
+
+		hero.currentMonster = hero.monsters[0]
+		hero.currentHP = hero.currentMonster.hp
+		hero.cursorPosition = 1
+
+		// Add images
 		this.enemyImage = enemy.image
-		this.playerImage = this.add.sprite(w + 100, 500, 'mummy').setScale(3)
-		this.lightningSprite = this.add.sprite(310, 475, 'lightning')
+		this.playerImage = this.add.sprite(w, 400, 'mummy').setScale(3)
+		this.lightningSprite = this.add.sprite(310, 400, 'lightning')
 		this.lightningSprite.alpha = 0
+		this.monsterImg = this.add.image(150, 400, hero.monsters[0].name)
+		this.monsterImg.alpha = 0
 
 		// Animate enemy onto screen
 		this.enemyTween = this.tweens.add({
@@ -85,8 +93,41 @@ export class Battle extends Phaser.Scene {
 			repeat: -1
 		}, this)
 
-		
+		// Battle UI
+		const fontStyle = {
+			fontSize: '32px', 
+			fill: '#000'
+		}
+		const infoBoxWidth = 350
+		const infoBoxHeight = 85
 
+		// Enemy monster info
+		this.infoBoxStyle = this.add.graphics()
+		this.infoBoxStyle.lineStyle(3, 0x000000)
+		this.infoBoxStyle.fillStyle(0x031f4c, 1)
+		this.enemyBox = this.infoBoxStyle.strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
+		this.enemyMonsterName = this.add.text(10, 5,enemy.monsters[0].name, fontStyle);
+		this.enemyMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+enemy.monsters[0].level, fontStyle).setOrigin(1,0)
+		this.enemyMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + enemy.currentHP + "/" + enemy.currentMonster.hp), fontStyle).setOrigin(0,1)
+
+		this.enemyInfoContainer  = this.add.container(15, 15, [this.enemyBox, this.enemyMonsterName, this.enemyMonsterLvl, this.enemyMonsterHP])
+
+		// Player monster info
+		this.heroBox = this.infoBoxStyle.strokeRect(0, 0, 350, 85)
+		this.heroMonsterName = this.add.text(10 , 5,hero.monsters[0].name, fontStyle)
+		this.heroMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+hero.monsters[0].level, fontStyle).setOrigin(1,0)
+		this.heroMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + hero.currentHP + "/" + hero.currentMonster.hp), fontStyle).setOrigin(0,1)
+
+		this.heroInfoContainer = this.add.container(w - 362, h - 240, [this.heroBox, this.heroMonsterName, this.heroMonsterLvl, this.heroMonsterHP])
+
+		// Main Menu
+		this.menuFightTxt = this.add.text(0, 0, 'Fight', fontStyle)
+		this.menuBagTxt = this.add.text(250, 0, 'Bag', fontStyle)
+		this.menuMonsterTxt = this.add.text(0, 55, 'Monsters', fontStyle)
+		this.menuRunTxt = this.add.text(250 , 55, 'Run', fontStyle)
+		this.menuArrow = this.add.sprite(-20, 15, 'arrow').setScale(0.45)
+
+		this.mainMenuContainer = this.add.container(w - 350, h - 130, [this.menuFightTxt, this.menuBagTxt, this.menuMonsterTxt, this.menuRunTxt, this.menuArrow])
 
 	}
 

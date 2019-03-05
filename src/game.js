@@ -18,7 +18,11 @@ const config = {
 	scene: [
 		StartOpen,
 		StartMonster,
-		PlayerView,
+
+		// ***** DEBUG *****
+		// PlayerView,
+		// ***** DEBUG *****
+		
 		Battle,
 	]
 };

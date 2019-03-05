@@ -3,8 +3,8 @@ let state = {
 	grassOverlap:'',
 	walking:'',
 	startEncounter: false,
-	monsterInv: [],
 	itemInv: [],
+	monsterInv: [],
 	encounterMonster:'',
 }
 
