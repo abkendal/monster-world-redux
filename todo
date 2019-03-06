@@ -6,6 +6,7 @@
 -map triggers for level transition
 -add animation/tween to into page
 -add info sceen before monster select scene
+-change hp to aniamted bar
 
 
 Main functional components to do:

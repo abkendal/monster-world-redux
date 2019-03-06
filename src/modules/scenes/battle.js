@@ -41,6 +41,8 @@ export class Battle extends Phaser.Scene {
 		this.monsterImg = this.add.image(150, 400, hero.monsters[0].name)
 		this.monsterImg.alpha = 0
 
+
+		// * ANIMAITONS *
 		// Animate enemy onto screen
 		this.enemyTween = this.tweens.add({
 			targets: this.enemyImage,
@@ -94,7 +96,7 @@ export class Battle extends Phaser.Scene {
 			repeat: -1
 		}, this)
 
-		// Battle UI
+		// * BATTLE UI *
 		const fontStyle = {
 			fontSize: '32px', 
 			fill: '#000'
@@ -102,13 +104,21 @@ export class Battle extends Phaser.Scene {
 		const infoBoxWidth = 350
 		const infoBoxHeight = 85
 
-		// Main menu arrow positions
-		const menuArrowPositions = [
-			[-20, 15],
-			[233, 15],
-			[-20, 70],
-			[233, 70]
-		]
+		// Menu arrow positions
+		const menuArrowPositions = {
+			mainMenu: [
+				['fight', -20, 15],
+				['bag', 233, 15],
+				['monsters', -20, 70],
+				['run', 233, 70]
+			],
+			fight: [
+				['ability1', -20, 15],
+				['ability2', 233, 15],
+				['ability3', -20, 70],
+				['ability4', 233, 70]
+			]
+		}
 
 		// Enemy monster info
 		this.enemyBox = this.add.graphics().lineStyle(3, 0x000000).fillStyle(0x031f4c, 1).strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
@@ -131,21 +141,19 @@ export class Battle extends Phaser.Scene {
 		this.menuBagTxt = this.add.text(250, 0, 'Bag', fontStyle)
 		this.menuMonsterTxt = this.add.text(0, 55, 'Monsters', fontStyle)
 		this.menuRunTxt = this.add.text(250 , 55, 'Run', fontStyle)
-		this.menuArrow = this.add.sprite(menuArrowPositions[0][0], menuArrowPositions[0][1], 'arrow').setScale(0.45)
+		this.menuArrow = this.add.sprite(menuArrowPositions.mainMenu[0][1], menuArrowPositions.mainMenu[0][2], 'arrow').setScale(0.45)
 
 		this.mainMenuContainer = this.add.container(w - 350, h - 130, [this.menuFightTxt, this.menuBagTxt, this.menuMonsterTxt, this.menuRunTxt, this.menuArrow])
 
-		// Controls
+
+		// * CONTROLS *
 		this.cursors = this.input.keyboard.createCursorKeys()
-		const positionArrow = function(){
-			this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
-		}
 
 		// Left: move selector left
 		this.cursors.left.on('down', function(){
 			if (hero.menuCursorPosition === 1 || hero.menuCursorPosition === 3) {
 				hero.menuCursorPosition = hero.menuCursorPosition - 1
-				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
 			}
 		}, this)
 
@@ -153,8 +161,7 @@ export class Battle extends Phaser.Scene {
 		this.cursors.right.on('down', function(){
 			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 2) {
 				hero.menuCursorPosition = hero.menuCursorPosition + 1
-				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
-
+				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
 			}
 		}, this)
 
@@ -162,7 +169,7 @@ export class Battle extends Phaser.Scene {
 		this.cursors.up.on('down', function(){
 			if (hero.menuCursorPosition === 2 || hero.menuCursorPosition === 3) {
 				hero.menuCursorPosition = hero.menuCursorPosition - 2
-				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
 			}
 		}, this)
 
@@ -170,7 +177,7 @@ export class Battle extends Phaser.Scene {
 		this.cursors.down.on('down', function(){
 			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 1){
 				hero.menuCursorPosition =hero.menuCursorPosition + 2
-				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
 			}
 		}, this)
 
