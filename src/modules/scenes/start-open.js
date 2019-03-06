@@ -48,7 +48,6 @@ export class StartOpen extends Phaser.Scene {
 
 		this.input.keyboard.on('keyup_SPACE', function(event){
 			this.scene.start('StartMonster')
-			// this.scene.start('Battle')
 		}, this)
 	}
 	update(time, delta) {

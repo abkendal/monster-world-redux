@@ -25,12 +25,13 @@ export class Battle extends Phaser.Scene {
 
 		}
 
+		// Set initial monster and cursor states
 		enemy.currentMonster = enemy.monsters[0]
 		enemy.currentHP = enemy.currentMonster.hp
 
 		hero.currentMonster = hero.monsters[0]
 		hero.currentHP = hero.currentMonster.hp
-		hero.cursorPosition = 1
+		hero.menuCursorPosition = 0
 
 		// Add images
 		this.enemyImage = enemy.image
@@ -81,7 +82,7 @@ export class Battle extends Phaser.Scene {
 			x: 150,
 			duration: 1700,
 			ease: 'Linear',
-			onComplete: lightningSummon,
+			onComplete: monsterSummon,
 			onCompleteParams: [ this.lightningSprite, this.lightningIn, this.playerOut, this.monsterIn ]
 		});
 
@@ -101,19 +102,24 @@ export class Battle extends Phaser.Scene {
 		const infoBoxWidth = 350
 		const infoBoxHeight = 85
 
+		// Main menu arrow positions
+		const menuArrowPositions = [
+			[-20, 15],
+			[233, 15],
+			[-20, 70],
+			[233, 70]
+		]
+
 		// Enemy monster info
-		this.infoBoxStyle = this.add.graphics()
-		this.infoBoxStyle.lineStyle(3, 0x000000)
-		this.infoBoxStyle.fillStyle(0x031f4c, 1)
-		this.enemyBox = this.infoBoxStyle.strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
+		this.enemyBox = this.add.graphics().lineStyle(3, 0x000000).fillStyle(0x031f4c, 1).strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
 		this.enemyMonsterName = this.add.text(10, 5,enemy.monsters[0].name, fontStyle);
 		this.enemyMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+enemy.monsters[0].level, fontStyle).setOrigin(1,0)
 		this.enemyMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + enemy.currentHP + "/" + enemy.currentMonster.hp), fontStyle).setOrigin(0,1)
 
-		this.enemyInfoContainer  = this.add.container(15, 15, [this.enemyBox, this.enemyMonsterName, this.enemyMonsterLvl, this.enemyMonsterHP])
+		this.enemyInfoContainer  = this.add.container(15, 15, [ this.enemyBox, this.enemyMonsterName, this.enemyMonsterLvl, this.enemyMonsterHP])
 
 		// Player monster info
-		this.heroBox = this.infoBoxStyle.strokeRect(0, 0, 350, 85)
+		this.heroBox = this.add.graphics().lineStyle(3, 0x000000).fillStyle(0x031f4c, 1).strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
 		this.heroMonsterName = this.add.text(10 , 5,hero.monsters[0].name, fontStyle)
 		this.heroMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+hero.monsters[0].level, fontStyle).setOrigin(1,0)
 		this.heroMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + hero.currentHP + "/" + hero.currentMonster.hp), fontStyle).setOrigin(0,1)
@@ -125,9 +131,50 @@ export class Battle extends Phaser.Scene {
 		this.menuBagTxt = this.add.text(250, 0, 'Bag', fontStyle)
 		this.menuMonsterTxt = this.add.text(0, 55, 'Monsters', fontStyle)
 		this.menuRunTxt = this.add.text(250 , 55, 'Run', fontStyle)
-		this.menuArrow = this.add.sprite(-20, 15, 'arrow').setScale(0.45)
+		this.menuArrow = this.add.sprite(menuArrowPositions[0][0], menuArrowPositions[0][1], 'arrow').setScale(0.45)
 
 		this.mainMenuContainer = this.add.container(w - 350, h - 130, [this.menuFightTxt, this.menuBagTxt, this.menuMonsterTxt, this.menuRunTxt, this.menuArrow])
+
+		// Controls
+		this.cursors = this.input.keyboard.createCursorKeys()
+		const positionArrow = function(){
+			this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+		}
+
+		// Left: move selector left
+		this.cursors.left.on('down', function(){
+			if (hero.menuCursorPosition === 1 || hero.menuCursorPosition === 3) {
+				hero.menuCursorPosition = hero.menuCursorPosition - 1
+				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+			}
+		}, this)
+
+		// Right: move selector right
+		this.cursors.right.on('down', function(){
+			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 2) {
+				hero.menuCursorPosition = hero.menuCursorPosition + 1
+				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+
+			}
+		}, this)
+
+		// Up: move selector up
+		this.cursors.up.on('down', function(){
+			if (hero.menuCursorPosition === 2 || hero.menuCursorPosition === 3) {
+				hero.menuCursorPosition = hero.menuCursorPosition - 2
+				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+			}
+		}, this)
+
+		// Down: move selector down
+		this.cursors.down.on('down', function(){
+			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 1){
+				hero.menuCursorPosition =hero.menuCursorPosition + 2
+				this.menuArrow.setPosition(menuArrowPositions[hero.menuCursorPosition][0], menuArrowPositions[hero.menuCursorPosition][1])
+			}
+		}, this)
+
+
 
 	}
 
@@ -138,7 +185,8 @@ export class Battle extends Phaser.Scene {
 	}
 }
 
-function lightningSummon (tween, targets, image, lightningIn, playerOut, monsterIn) {
+// Monster Summon animation sequence
+function monsterSummon (tween, targets, image, lightningIn, playerOut, monsterIn) {
 	lightningIn.play()
 	image.play('summon')
 
@@ -150,6 +198,13 @@ function lightningSummon (tween, targets, image, lightningIn, playerOut, monster
 		monsterIn.play()
 	 }, 1500, monsterIn)
 }
+
+
+
+
+
+
+
 
 
 
