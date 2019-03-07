@@ -1,16 +1,21 @@
+-battle text between menu selection (copy view)
+-using abilities
+-enemy combat 
+-flip enemy sprite
 -implement containers for animations 
 -walking sound
--battle stage
 -menu stage (run in parallel)
 -additional levels, inside buildings/towns
 -map triggers for level transition
--add animation/tween to into page
+-add animation/tween to intro page
 -add info sceen before monster select scene
 -change hp to aniamted bar
 
 
 Main functional components to do:
 -Battle system
+-catching
 -experience/evolution
 -Items
 -Menu
+-Multiple levels/buildings 

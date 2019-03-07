@@ -6,6 +6,8 @@ let state = {
 	itemInv: [],
 	monsterInv: [],
 	encounterMonster:'',
+	currentMenu: 'main',
+	menuItemSelected: 'fight',
 }
 
 const w = 800

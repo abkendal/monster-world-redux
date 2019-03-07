@@ -1,5 +1,5 @@
 import Monster from './monsters';
-// import abilities from './../abilities/abilities';
+import abilities from './../abilities/abilities';
 import elementalTypes from './../elemental-types';
 
 const hpMultiplier = 1;
@@ -21,11 +21,11 @@ export default class extends Monster {
       speedMultiplier
     );
 
-    // this.abilities = [
-    //   abilities.bite,
-    //   abilities.fireBreath,
-    //   abilities.stare,
-    // ];
+    this.abilities = [
+      abilities.bite,
+      abilities.fireBreath,
+      abilities.stare,
+    ];
 
     this.name = 'Batball';
     this.sprite = 'assets/images/monsters/BatBall1.png';

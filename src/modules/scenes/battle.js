@@ -1,3 +1,4 @@
+import abilities from './../abilities/abilities';
 export class Battle extends Phaser.Scene {
 	constructor(){
 		super({key:"Battle"})
@@ -15,26 +16,27 @@ export class Battle extends Phaser.Scene {
 		let hero = {}
 		hero.monsters = state.monsterInv
 
-
-		let enemy = {}
+		// Get enemy data, set up encounter or summoner battle
+		this.enemy = {}
 		if (data.type === 'encounter'){
-			enemy.monsters = [state.encounterMonster]
-			enemy.image = this.add.image(-100 , 100, enemy.monsters[0].name)
+			this.enemy.monsters = [state.encounterMonster]
+			this.enemy.image = this.add.image(-100 , 100, this.enemy.monsters[0].name)
 		}
 		else if (data.type === 'battle'){
 
 		}
 
 		// Set initial monster and cursor states
-		enemy.currentMonster = enemy.monsters[0]
-		enemy.currentHP = enemy.currentMonster.hp
+		this.enemy.currentMonster = this.enemy.monsters[0]
+		this.enemy.currentHP = this.enemy.currentMonster.hp
 
 		hero.currentMonster = hero.monsters[0]
 		hero.currentHP = hero.currentMonster.hp
 		hero.menuCursorPosition = 0
+		hero.monsterAbilities = hero.currentMonster.abilities
 
 		// Add images
-		this.enemyImage = enemy.image
+		this.enemyImage = this.enemy.image
 		this.playerImage = this.add.sprite(w, 400, 'mummy').setScale(3)
 		this.lightningSprite = this.add.sprite(310, 400, 'lightning')
 		this.lightningSprite.alpha = 0
@@ -42,7 +44,7 @@ export class Battle extends Phaser.Scene {
 		this.monsterImg.alpha = 0
 
 
-		// * ANIMAITONS *
+		// **** ANIMAITONS ****
 		// Animate enemy onto screen
 		this.enemyTween = this.tweens.add({
 			targets: this.enemyImage,
@@ -96,7 +98,9 @@ export class Battle extends Phaser.Scene {
 			repeat: -1
 		}, this)
 
-		// * BATTLE UI *
+
+
+		// **** BATTLE UI ****
 		const fontStyle = {
 			fontSize: '32px', 
 			fill: '#000'
@@ -112,19 +116,19 @@ export class Battle extends Phaser.Scene {
 				['monsters', -20, 70],
 				['run', 233, 70]
 			],
-			fight: [
-				['ability1', -20, 15],
-				['ability2', 233, 15],
-				['ability3', -20, 70],
-				['ability4', 233, 70]
+			fightMenu: [
+				['ability1', -20, 18],
+				['ability2', 280, 18],
+				['ability3', -20, 85],
+				['ability4', 280, 85]
 			]
 		}
 
 		// Enemy monster info
 		this.enemyBox = this.add.graphics().lineStyle(3, 0x000000).fillStyle(0x031f4c, 1).strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
-		this.enemyMonsterName = this.add.text(10, 5,enemy.monsters[0].name, fontStyle);
-		this.enemyMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+enemy.monsters[0].level, fontStyle).setOrigin(1,0)
-		this.enemyMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + enemy.currentHP + "/" + enemy.currentMonster.hp), fontStyle).setOrigin(0,1)
+		this.enemyMonsterName = this.add.text(10, 5,this.enemy.monsters[0].name, fontStyle);
+		this.enemyMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+this.enemy.monsters[0].level, fontStyle).setOrigin(1,0)
+		this.enemyMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + this.enemy.currentHP + "/" + this.enemy.currentMonster.hp), fontStyle).setOrigin(0,1)
 
 		this.enemyInfoContainer  = this.add.container(15, 15, [ this.enemyBox, this.enemyMonsterName, this.enemyMonsterLvl, this.enemyMonsterHP])
 
@@ -145,15 +149,41 @@ export class Battle extends Phaser.Scene {
 
 		this.mainMenuContainer = this.add.container(w - 350, h - 130, [this.menuFightTxt, this.menuBagTxt, this.menuMonsterTxt, this.menuRunTxt, this.menuArrow])
 
+		// Fight Menu
+		this.ability1Txt = this.add.text(0, 0, hero.monsterAbilities[0].name, fontStyle)
+		this.ability2Txt = this.add.text(300, 0, hero.monsterAbilities[1].name, fontStyle)
+		this.ability3Txt = this.add.text(0, 70, '-', fontStyle)
+		this.ability4Txt = this.add.text(300, 70, '-', fontStyle)
+		this.fightArrow  = this.add.sprite(menuArrowPositions.fightMenu[0][1], menuArrowPositions.fightMenu[0][2], 'arrow').setScale(0.45)
+		if (hero.monsterAbilities[2]){
+			this.ability3Txt.setText(hero.monsterAbilities[2].name)
+		}
+		if (hero.monsterAbilities[3]){
+			this.ability4Txt.setText(hero.monsterAbilities[3].name)
+		}
 
-		// * CONTROLS *
+		this.fightMenuContainer = this.add.container(45, h - 130, [this.ability1Txt, this.ability2Txt, this.ability3Txt, this.ability4Txt, this.fightArrow])
+		this.fightMenuContainer.visible = false
+
+
+
+		// **** CONTROLS ****
 		this.cursors = this.input.keyboard.createCursorKeys()
 
 		// Left: move selector left
 		this.cursors.left.on('down', function(){
 			if (hero.menuCursorPosition === 1 || hero.menuCursorPosition === 3) {
 				hero.menuCursorPosition = hero.menuCursorPosition - 1
-				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+
+				if (state.currentMenu === 'main'){
+					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
+				}
+				else if (state.currentMenu === 'fight') {
+					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
+				}
+				
 			}
 		}, this)
 
@@ -161,7 +191,15 @@ export class Battle extends Phaser.Scene {
 		this.cursors.right.on('down', function(){
 			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 2) {
 				hero.menuCursorPosition = hero.menuCursorPosition + 1
-				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+				
+				if (state.currentMenu === 'main'){
+					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
+				}
+				else if (state.currentMenu === 'fight') {
+					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
+				}
 			}
 		}, this)
 
@@ -169,7 +207,15 @@ export class Battle extends Phaser.Scene {
 		this.cursors.up.on('down', function(){
 			if (hero.menuCursorPosition === 2 || hero.menuCursorPosition === 3) {
 				hero.menuCursorPosition = hero.menuCursorPosition - 2
-				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+				
+				if (state.currentMenu === 'main'){
+					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
+				}
+				else if (state.currentMenu === 'fight') {
+					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
+				}
 			}
 		}, this)
 
@@ -177,7 +223,57 @@ export class Battle extends Phaser.Scene {
 		this.cursors.down.on('down', function(){
 			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 1){
 				hero.menuCursorPosition =hero.menuCursorPosition + 2
+				
+				if (state.currentMenu === 'main'){
+					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
+				}
+				else if (state.currentMenu === 'fight') {
+					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
+				}
+			}
+		}, this)
+
+		// Space: menu select
+		this.input.keyboard.on('keydown_SPACE', function(event){
+			// Main menu
+			if (state.currentMenu === 'main') {
+				if (state.menuItemSelected === 'fight'){
+					// Set state and change visibility
+					state.currentMenu = 'fight'
+					state.menuItemSelected = 'ability1'
+					this.fightMenuContainer.visible = true
+					this.mainMenuContainer.visible = false
+
+					// Set cursor
+					hero.menuCursorPosition = 0
+					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
+					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
+				}
+				else if (state.menuItemSelected === 'run'){
+					this.scene.start('PlayerView', {level: 'overworld1'})
+				}
+			}
+			// Fight menu
+			else if (state.currentMenu === 'fight') {
+				abilities.useAbility.apply(this, ['player', hero.currentMonster, hero.currentMonster.abilities[hero.menuCursorPosition], this.enemy.currentMonster])
+
+
+
+				// Set state and change visibility
+				state.currentMenu = 'main'
+				state.menuItemSelected = 'fight'
+				this.fightMenuContainer.visible = false
+				this.mainMenuContainer.visible = true
+
+				// Set Cursor
+				hero.menuCursorPosition = 0
 				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
+				state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
+			}
+			else if (state.currentMenu === 'text') {
+
 			}
 		}, this)
 
@@ -186,7 +282,7 @@ export class Battle extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-
+		this.enemyMonsterHP.setText("HP: " + this.enemy.currentHP + "/" + this.enemy.currentMonster.hp)
 		
 
 	}

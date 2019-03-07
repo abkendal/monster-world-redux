@@ -83,7 +83,7 @@ export class StartMonster extends Phaser.Scene {
 		}, this)
 
 		// Space: Select starting monster and move on to next scene
-		this.input.keyboard.on('keyup_SPACE', function(event){
+		this.input.keyboard.on('keydown_SPACE', function(event){
 			if (this.starterSelect === 1){
 				state.monsterInv.push(starterMonster[0])
 			}

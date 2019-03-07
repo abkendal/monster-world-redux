@@ -46,7 +46,7 @@ export class StartOpen extends Phaser.Scene {
 		text.setWordWrapWidth(800, false)
 		text.setOrigin(0.5);
 
-		this.input.keyboard.on('keyup_SPACE', function(event){
+		this.input.keyboard.on('keydown_SPACE', function(event){
 			this.scene.start('StartMonster')
 		}, this)
 	}
