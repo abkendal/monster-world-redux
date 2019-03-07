@@ -3,7 +3,7 @@ import abilities from './../abilities/abilities';
 import elementalTypes from './../elemental-types';
 
 const hpMultiplier = 1;
-const attackMultiplier = 500;
+const attackMultiplier = 3;
 const defenseMultiplier = 1;
 const spAttackMultiplier = 1;
 const spDefenseMultiplier = 1;

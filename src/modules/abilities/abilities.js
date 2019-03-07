@@ -6,15 +6,12 @@ import elementalTypes from './../elemental-types';
 var allAbilities = {
 	useAbility: function (controller, attacker, ability, defender) {
 
-
 		// if (ability.category === 'status' || ability.category === 'special') {
 		// 	modifyAbility(ability, attacker, defender);
 		// }
 
 		let damageModifier = checkTypeEffectiveness(ability, defender);
-
 		dealDamage.apply(this, [attacker, ability, damageModifier, defender])
-
 		
 	},
 };
@@ -85,7 +82,7 @@ allAbilities.fireBlast = new Abilities('Fire Blast', 0.9, 'special', 80, element
     // effect: 'Chance of burn',
     // modifier: 0.1,
     // targetSelf: false,
-allAbilities.razorLeaf = new Abilities('Razor Petal', 0.9, 'special', 50000, elementalTypes.grass);
+allAbilities.razorLeaf = new Abilities('Razor Leaf', 0.9, 'special', 60, elementalTypes.grass);
 
     // attribute: 'defense',
     // conditionApplied: 'burn',
