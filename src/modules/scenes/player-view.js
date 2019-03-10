@@ -49,7 +49,13 @@ export class PlayerView extends Phaser.Scene {
 		const grassLayer = map.createDynamicLayer("grass", tileset, 0, 0)
 
 		// Set encounter callback to grass tiles
+		grassLayer.setTileIndexCallback(166, encounterRand, this)
 		grassLayer.setTileIndexCallback(167, encounterRand, this)
+		grassLayer.setTileIndexCallback(168, encounterRand, this)
+		grassLayer.setTileIndexCallback(178, encounterRand, this)
+		grassLayer.setTileIndexCallback(179, encounterRand, this)
+		grassLayer.setTileIndexCallback(180, encounterRand, this)
+
 
 		// the player will collide with this layer
 		worldLayer.setCollisionByExclusion([-1])

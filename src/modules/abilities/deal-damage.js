@@ -1,9 +1,8 @@
-export default function (attacker, ability, damageModifier, defender) {
+export default function (controller, attacker, ability, damageModifier, defender) {
   // Still needs accuracy modifier
   let damage;
   const power = ability.power;
-  console.log(defender)
-  console.log(this.enemy)
+
 
 
   // Physical attacks use the attack and defense attributes
@@ -14,10 +13,21 @@ export default function (attacker, ability, damageModifier, defender) {
   // Special attacks use the spAttack and spDefense attributes
   } else if (ability.category === 'special') {
     damage = power * (attacker.spAttack * 1.5) * 0.04 / defender.spDefense * damageModifier;
-    console.log(damage, power, attacker.attack, defender.defense, damageModifier)
   }
 
   if (typeof damage !== 'undefined') {
-    this.enemy.currentHP = Math.round(this.enemy.currentHP - damage);
+    if (controller === 'player'){
+      this.enemy.currentHP = Math.round(this.enemy.currentHP - damage);
+      if (this.enemy.currentHP < 0) {
+        this.enemy.currentHP = 0
+      }
+    }
+    else {
+      this.hero.currentHP  = Math.round(this.hero.currentHP - damage);
+      if (this.hero.currentHP < 0) {
+        this.hero.currentHP = 0
+      }
+    }
+
   }
 }

@@ -7,7 +7,7 @@ const attackMultiplier = 2;
 const defenseMultiplier = 1;
 const spAttackMultiplier = 1;
 const spDefenseMultiplier = 1;
-const speedMultiplier = 3;
+const speedMultiplier = 1;
 
 export default class extends Monster {
 	constructor(lvl) {

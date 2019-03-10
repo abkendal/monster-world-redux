@@ -9,10 +9,11 @@ var allAbilities = {
 		// if (ability.category === 'status' || ability.category === 'special') {
 		// 	modifyAbility(ability, attacker, defender);
 		// }
+		// console.log(controller, attacker, ability, defender)
 
 		let damageModifier = checkTypeEffectiveness(ability, defender);
-		dealDamage.apply(this, [attacker, ability, damageModifier, defender])
-		
+		dealDamage.apply(this, [controller, attacker, ability, damageModifier, defender])
+		return damageModifier
 	},
 };
 

@@ -11,10 +11,9 @@ export class Battle extends Phaser.Scene {
 
 
 	create(data){
-		
+		this.hero = {}
 		// Get player data, monsters in inventory 
-		let hero = {}
-		hero.monsters = state.monsterInv
+		this.hero.monsters = state.monsterInv
 
 		// Get enemy data, set up encounter or summoner battle
 		this.enemy = {}
@@ -30,17 +29,17 @@ export class Battle extends Phaser.Scene {
 		this.enemy.currentMonster = this.enemy.monsters[0]
 		this.enemy.currentHP = this.enemy.currentMonster.hp
 
-		hero.currentMonster = hero.monsters[0]
-		hero.currentHP = hero.currentMonster.hp
-		hero.menuCursorPosition = 0
-		hero.monsterAbilities = hero.currentMonster.abilities
+		this.hero.currentMonster = this.hero.monsters[0]
+		this.hero.currentHP = this.hero.currentMonster.hp
+		this.hero.menuCursorPosition = 0
+		this.hero.monsterAbilities = this.hero.currentMonster.abilities
 
 		// Add images
 		this.enemyImage = this.enemy.image
 		this.playerImage = this.add.sprite(w, 400, 'mummy').setScale(3)
 		this.lightningSprite = this.add.sprite(310, 400, 'lightning')
 		this.lightningSprite.alpha = 0
-		this.monsterImg = this.add.image(150, 400, hero.monsters[0].name)
+		this.monsterImg = this.add.image(150, 400, this.hero.monsters[0].name)
 		this.monsterImg.alpha = 0
 
 
@@ -109,7 +108,7 @@ export class Battle extends Phaser.Scene {
 		const infoBoxHeight = 85
 
 		// Menu arrow positions
-		const menuArrowPositions = {
+		this.menuArrowPositions = {
 			mainMenu: [
 				['fight', -20, 15],
 				['bag', 233, 15],
@@ -134,9 +133,9 @@ export class Battle extends Phaser.Scene {
 
 		// Player monster info
 		this.heroBox = this.add.graphics().lineStyle(3, 0x000000).fillStyle(0x031f4c, 1).strokeRect(0, 0, infoBoxWidth, infoBoxHeight)
-		this.heroMonsterName = this.add.text(10 , 5,hero.monsters[0].name, fontStyle)
-		this.heroMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+hero.monsters[0].level, fontStyle).setOrigin(1,0)
-		this.heroMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + hero.currentHP + "/" + hero.currentMonster.hp), fontStyle).setOrigin(0,1)
+		this.heroMonsterName = this.add.text(10 , 5,this.hero.monsters[0].name, fontStyle)
+		this.heroMonsterLvl = this.add.text(infoBoxWidth - 10, 5, "Lv"+this.hero.monsters[0].level, fontStyle).setOrigin(1,0)
+		this.heroMonsterHP = this.add.text(10, infoBoxHeight - 5, ("HP: " + this.hero.currentHP + "/" + this.hero.currentMonster.hp), fontStyle).setOrigin(0,1)
 
 		this.heroInfoContainer = this.add.container(w - 362, h - 240, [this.heroBox, this.heroMonsterName, this.heroMonsterLvl, this.heroMonsterHP])
 
@@ -145,25 +144,31 @@ export class Battle extends Phaser.Scene {
 		this.menuBagTxt = this.add.text(250, 0, 'Bag', fontStyle)
 		this.menuMonsterTxt = this.add.text(0, 55, 'Monsters', fontStyle)
 		this.menuRunTxt = this.add.text(250 , 55, 'Run', fontStyle)
-		this.menuArrow = this.add.sprite(menuArrowPositions.mainMenu[0][1], menuArrowPositions.mainMenu[0][2], 'arrow').setScale(0.45)
+		this.menuArrow = this.add.sprite(this.menuArrowPositions.mainMenu[0][1], this.menuArrowPositions.mainMenu[0][2], 'arrow').setScale(0.45)
 
 		this.mainMenuContainer = this.add.container(w - 350, h - 130, [this.menuFightTxt, this.menuBagTxt, this.menuMonsterTxt, this.menuRunTxt, this.menuArrow])
 
 		// Fight Menu
-		this.ability1Txt = this.add.text(0, 0, hero.monsterAbilities[0].name, fontStyle)
-		this.ability2Txt = this.add.text(300, 0, hero.monsterAbilities[1].name, fontStyle)
+		this.ability1Txt = this.add.text(0, 0, this.hero.monsterAbilities[0].name, fontStyle)
+		this.ability2Txt = this.add.text(300, 0, this.hero.monsterAbilities[1].name, fontStyle)
 		this.ability3Txt = this.add.text(0, 70, '-', fontStyle)
 		this.ability4Txt = this.add.text(300, 70, '-', fontStyle)
-		this.fightArrow  = this.add.sprite(menuArrowPositions.fightMenu[0][1], menuArrowPositions.fightMenu[0][2], 'arrow').setScale(0.45)
-		if (hero.monsterAbilities[2]){
-			this.ability3Txt.setText(hero.monsterAbilities[2].name)
+		this.fightArrow  = this.add.sprite(this.menuArrowPositions.fightMenu[0][1], this.menuArrowPositions.fightMenu[0][2], 'arrow').setScale(0.45)
+		if (this.hero.monsterAbilities[2]){
+			this.ability3Txt.setText(this.hero.monsterAbilities[2].name)
 		}
-		if (hero.monsterAbilities[3]){
-			this.ability4Txt.setText(hero.monsterAbilities[3].name)
+		if (this.hero.monsterAbilities[3]){
+			this.ability4Txt.setText(this.hero.monsterAbilities[3].name)
 		}
 
 		this.fightMenuContainer = this.add.container(45, h - 130, [this.ability1Txt, this.ability2Txt, this.ability3Txt, this.ability4Txt, this.fightArrow])
 		this.fightMenuContainer.visible = false
+
+		// Battle text
+		this.battleText = this.add.text(0, 0, 'Monster used X attack', fontStyle)
+
+		this.battleTextContainer = this.add.container(30, h - 120, [this.battleText])
+		this.battleTextContainer.visible = false
 
 
 
@@ -172,108 +177,133 @@ export class Battle extends Phaser.Scene {
 
 		// Left: move selector left
 		this.cursors.left.on('down', function(){
-			if (hero.menuCursorPosition === 1 || hero.menuCursorPosition === 3) {
-				hero.menuCursorPosition = hero.menuCursorPosition - 1
-
-				if (state.currentMenu === 'main'){
-					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
-				}
-				else if (state.currentMenu === 'fight') {
-					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
-				}
-				
+			if (this.hero.menuCursorPosition === 1 || this.hero.menuCursorPosition === 3) {
+				this.hero.menuCursorPosition = this.hero.menuCursorPosition - 1
+				updateCursorPosition.apply(this);
 			}
 		}, this)
 
 		// Right: move selector right
 		this.cursors.right.on('down', function(){
-			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 2) {
-				hero.menuCursorPosition = hero.menuCursorPosition + 1
-				
-				if (state.currentMenu === 'main'){
-					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
-				}
-				else if (state.currentMenu === 'fight') {
-					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
-				}
+			if (this.hero.menuCursorPosition === 0 || this.hero.menuCursorPosition === 2) {
+				this.hero.menuCursorPosition = this.hero.menuCursorPosition + 1
+				updateCursorPosition.apply(this);
 			}
 		}, this)
 
 		// Up: move selector up
 		this.cursors.up.on('down', function(){
-			if (hero.menuCursorPosition === 2 || hero.menuCursorPosition === 3) {
-				hero.menuCursorPosition = hero.menuCursorPosition - 2
-				
-				if (state.currentMenu === 'main'){
-					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
-				}
-				else if (state.currentMenu === 'fight') {
-					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
-				}
+			if (this.hero.menuCursorPosition === 2 || this.hero.menuCursorPosition === 3) {
+				this.hero.menuCursorPosition = this.hero.menuCursorPosition - 2
+				updateCursorPosition.apply(this);
 			}
 		}, this)
 
 		// Down: move selector down
 		this.cursors.down.on('down', function(){
-			if (hero.menuCursorPosition === 0 || hero.menuCursorPosition === 1){
-				hero.menuCursorPosition =hero.menuCursorPosition + 2
-				
-				if (state.currentMenu === 'main'){
-					this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
-				}
-				else if (state.currentMenu === 'fight') {
-					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
-				}
+			if (this.hero.menuCursorPosition === 0 || this.hero.menuCursorPosition === 1){
+				this.hero.menuCursorPosition = this.hero.menuCursorPosition + 2
+				updateCursorPosition.apply(this);
 			}
 		}, this)
 
 		// Space: menu select
 		this.input.keyboard.on('keydown_SPACE', function(event){
 			// Main menu
-			if (state.currentMenu === 'main') {
+			if (state.currentBattleMenu === 'main') {
 				if (state.menuItemSelected === 'fight'){
 					// Set state and change visibility
-					state.currentMenu = 'fight'
+					state.currentBattleMenu = 'fight'
 					state.menuItemSelected = 'ability1'
 					this.fightMenuContainer.visible = true
 					this.mainMenuContainer.visible = false
 
 					// Set cursor
-					hero.menuCursorPosition = 0
-					this.fightArrow.setPosition(menuArrowPositions.fightMenu[hero.menuCursorPosition][1], menuArrowPositions.fightMenu[hero.menuCursorPosition][2])
-					state.menuItemSelected = menuArrowPositions.fightMenu[hero.menuCursorPosition][0]
+					this.hero.menuCursorPosition = 0
+					this.fightArrow.setPosition(this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][1], this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][2])
+					state.menuItemSelected = this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][0]
 				}
 				else if (state.menuItemSelected === 'run'){
 					this.scene.start('PlayerView', {level: 'overworld1'})
 				}
 			}
 			// Fight menu
-			else if (state.currentMenu === 'fight') {
-				abilities.useAbility.apply(this, ['player', hero.currentMonster, hero.currentMonster.abilities[hero.menuCursorPosition], this.enemy.currentMonster])
-
-
-
-				// Set state and change visibility
-				state.currentMenu = 'main'
-				state.menuItemSelected = 'fight'
+			else if (state.currentBattleMenu === 'fight') {
+				// Hide fight menu, display battle text
 				this.fightMenuContainer.visible = false
+				this.battleTextContainer.visible = true
+
+				// Get speed of both monsters to determine which is faster
+				this.enemySpeed = this.enemy.currentMonster.speed
+				this.heroSpeed = this.hero.currentMonster.speed
+
+				// Get choser player ability and the randomly selected enemy ability
+				this.heroAbility = this.hero.currentMonster.abilities[this.hero.menuCursorPosition]
+				this.enemyAbility = this.enemy.currentMonster.abilities[Math.floor(Math.random()*this.enemy.currentMonster.abilities.length)]
+
+				// 1st Attack: Faster monster attacks first
+				if (this.heroSpeed > this.enemySpeed) {
+					this.abilityUsed = useAbility.apply(this, ['player'])
+					// If the defending monster dies from the attack
+					if (this.abilityUsed) {
+						state.currentBattleMenu = 'enemyMonsterDeath'
+					}
+					else {
+						state.currentBattleMenu = 'ability1Txt'
+					}
+
+				}
+				else if (this.enemySpeed >= this.heroSpeed){
+					this.abilityUsed = useAbility.apply(this, ['enemy'])
+					// If the defending monster dies from the attack
+					if (this.abilityUsed) {
+						state.currentBattleMenu = 'playerMonsterDeath'
+					}
+					else {
+						state.currentBattleMenu = 'ability1Txt'
+					}
+				}
+
+				
+			}
+			//First attacker text displayed
+			else if (state.currentBattleMenu === 'ability1Txt') {
+
+				// 2nd Attack: Slower monster attacks second
+				if (this.heroSpeed  < this.enemySpeed) {
+					this.abilityUsed = useAbility.apply(this, ['player'])
+
+					if (this.abilityUsed) {
+						state.currentBattleMenu = 'enemyMonsterDeath'
+					}
+					else {
+						state.currentBattleMenu = 'ability2Txt'
+					}
+
+				}
+				else if (this.enemySpeed <= this.heroSpeed){
+					this.abilityUsed = useAbility.apply(this, ['enemy'])
+
+					if (this.abilityUsed) {
+						state.currentBattleMenu = 'playerMonsterDeath'
+					}
+					else {
+						state.currentBattleMenu = 'ability2Txt'
+					}
+				}
+			}
+			// Second attacker text displayed
+			else if (state.currentBattleMenu === 'ability2Txt'){
+				// Set state and change visibility
+				state.currentBattleMenu = 'main'
+				state.menuItemSelected = 'fight'
+				this.battleTextContainer.visible = false
 				this.mainMenuContainer.visible = true
 
 				// Set Cursor
-				hero.menuCursorPosition = 0
-				this.menuArrow.setPosition(menuArrowPositions.mainMenu[hero.menuCursorPosition][1], menuArrowPositions.mainMenu[hero.menuCursorPosition][2])
-				state.menuItemSelected = menuArrowPositions.mainMenu[hero.menuCursorPosition][0]
-			}
-			else if (state.currentMenu === 'text') {
-
+				this.hero.menuCursorPosition = 0
+				this.menuArrow.setPosition(this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][1], this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][2])
+				state.menuItemSelected = this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][0]
 			}
 		}, this)
 
@@ -283,7 +313,7 @@ export class Battle extends Phaser.Scene {
 
 	update(time, delta) {
 		this.enemyMonsterHP.setText("HP: " + this.enemy.currentHP + "/" + this.enemy.currentMonster.hp)
-		
+		this.heroMonsterHP.setText("HP: " + this.hero.currentHP + "/" + this.hero.currentMonster.hp)
 
 	}
 }
@@ -302,11 +332,58 @@ function monsterSummon (tween, targets, image, lightningIn, playerOut, monsterIn
 	 }, 1500, monsterIn)
 }
 
+// Update cursor position on arrow key press
+function updateCursorPosition (){
+	if (state.currentBattleMenu === 'main'){
+		this.menuArrow.setPosition(this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][1], this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][2])
+		state.menuItemSelected = this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][0]
+	}
+	else if (state.currentBattleMenu === 'fight') {
+		this.fightArrow.setPosition(this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][1], this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][2])
+		state.menuItemSelected = this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][0]
+	}
+}
 
 
+// Calculate damage, update health and display ability combat text
+function useAbility(attacker){
+	if (attacker === 'player'){
+		this.effectiveness = abilities.useAbility.apply(this, [attacker, this.hero.currentMonster, this.heroAbility, this.enemy.currentMonster])
 
+		// Set text
+		if (this.effectiveness === 1.5 ){
+			this.battleText.setText([this.hero.currentMonster.name + " used " + this.heroAbility.name + '.', 'It was super effective!'])
+		}
+		else if (this.effectiveness === 0.5) {
+			this.battleText.setText([this.hero.currentMonster.name + " used " + this.heroAbility.name + '.', 'It was not very effective...'])
+		}
+		else if (this.effectiveness === 1) {
+			this.battleText.setText(this.hero.currentMonster.name + " used " + this.heroAbility.name + '.')
+		}
 
+		if (this.enemy.currentHP === 0 ){
+			return ['enemy']
+		}
+	}
+	else if (attacker === 'enemy') {
+		this.effectiveness = abilities.useAbility.apply(this, [attacker, this.enemy.currentMonster, this.enemyAbility, this.hero.currentMonster])
+		
+		// Set text
+		if (this.effectiveness === 1.5 ){
+			this.battleText.setText([this.enemy.currentMonster.name + " used " + this.enemyAbility.name + '.', 'It was super effective!'])
+		}
+		else if (this.effectiveness === 0.5) {
+			this.battleText.setText([this.enemy.currentMonster.name + " used " + this.enemyAbility.name + '.', 'It was not very effective...'])
+		}
+		else if (this.effectiveness === 1) {
+			this.battleText.setText(this.enemy.currentMonster.name + " used " + this.enemyAbility.name + '.')
+		}
 
+		if (this.hero.currentHP === 0 ){
+			return ['hero']
+		}
+	}
+}
 
 
 

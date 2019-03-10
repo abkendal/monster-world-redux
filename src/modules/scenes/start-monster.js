@@ -97,9 +97,9 @@ export class StartMonster extends Phaser.Scene {
 			music.theme.stop()
 
 			// ***** DEBUG *****
-			// this.scene.start('PlayerView', {level: 'overworld1'})
-			state.encounterMonster = new Beep(1)
-			this.scene.start('Battle', {type: 'encounter'})
+			this.scene.start('PlayerView', {level: 'overworld1'})
+			// state.encounterMonster = new Beep(1)
+			// this.scene.start('Battle', {type: 'encounter'})
 			// ***** DEBUG *****
 			
 		}, this)

@@ -1,8 +1,8 @@
 -battle text between menu selection (copy view)
--using abilities
--enemy combat 
 -flip enemy sprite
 -implement containers for animations 
+
+
 -walking sound
 -menu stage (run in parallel)
 -additional levels, inside buildings/towns

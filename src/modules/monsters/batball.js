@@ -25,6 +25,7 @@ export default class extends Monster {
       abilities.bite,
       abilities.fireBreath,
       abilities.stare,
+      abilities.razorLeaf
     ];
 
     this.name = 'Batball';
