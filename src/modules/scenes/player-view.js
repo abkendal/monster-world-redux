@@ -67,7 +67,7 @@ export class PlayerView extends Phaser.Scene {
 
 		// Player
 		// Add player image
-		player = this.physics.add.sprite(200, 200, 'mummy')
+		player = this.physics.add.sprite(state.playerPosition.x, state.playerPosition.y, 'mummy')
 
 		// Prevent player from walking off screen
 		player.setCollideWorldBounds(true)
@@ -170,6 +170,7 @@ export class PlayerView extends Phaser.Scene {
 		if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
 			state.walking = true
 
+
 			// Switch to encounter level if encounter triggered while walking 
 			if (state.startEncounter){
 				state.startEncounter = false
@@ -192,6 +193,9 @@ function encounterRand () {
 	if (state.walking){
 		const rand = Math.random()
 		if (rand > 0.992) {
+			state.playerPosition.x = player.x
+			state.playerPosition.y = player.y
+			console.log(state.playerPosition)
 			state.startEncounter = true
 			state.encounterMonster = new Beep(1)
 		}

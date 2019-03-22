@@ -8,7 +8,11 @@ let state = {
 	encounterMonster:'',
 	currentBattleMenu: 'main',
 	menuItemSelected: 'fight',
-	attackEffectiveness: ''
+	attackEffectiveness: '',
+	playerPosition: {
+		x: 200,
+		y: 200
+	},
 }
 
 const w = 800

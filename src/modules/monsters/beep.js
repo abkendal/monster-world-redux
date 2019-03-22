@@ -8,6 +8,7 @@ const defenseMultiplier = 1;
 const spAttackMultiplier = 1;
 const spDefenseMultiplier = 1;
 const speedMultiplier = 2;
+const baseExpYield = 3;
 
 export default class extends Monster {
 	constructor(lvl) {
@@ -18,7 +19,8 @@ export default class extends Monster {
 			defenseMultiplier,
 			spAttackMultiplier,
 			spDefenseMultiplier,
-			speedMultiplier
+			speedMultiplier,
+			baseExpYield
 			);
 
 		this.abilities = [

@@ -11,6 +11,8 @@ export class Battle extends Phaser.Scene {
 
 
 	create(data){
+		state.currentBattleMenu =  'main'
+		state.menuItemSelected = 'fight'
 		this.hero = {}
 		// Get player data, monsters in inventory 
 		this.hero.monsters = state.monsterInv
@@ -30,6 +32,7 @@ export class Battle extends Phaser.Scene {
 		this.enemy.currentHP = this.enemy.currentMonster.hp
 
 		this.hero.currentMonster = this.hero.monsters[0]
+		console.log(this.hero.currentMonster)
 		this.hero.currentHP = this.hero.currentMonster.hp
 		this.hero.menuCursorPosition = 0
 		this.hero.monsterAbilities = this.hero.currentMonster.abilities
@@ -170,6 +173,18 @@ export class Battle extends Phaser.Scene {
 		this.battleTextContainer = this.add.container(30, h - 120, [this.battleText])
 		this.battleTextContainer.visible = false
 
+		// Enemy dead text
+		this.enemyDeathText = this.add.text(0, 0, 'Monster has died', fontStyle)
+
+		this.enemyDeathTextContainer = this.add.container(30, h - 120, [this.enemyDeathText])
+		this.enemyDeathTextContainer.visible = false
+
+		// Enemy dead text
+		this.lvlUpText = this.add.text(0, 0, '', fontStyle)
+
+		this.lvlUpTextContainer = this.add.container(30, h - 120, [this.lvlUpText])
+		this.lvlUpTextContainer.visible = false
+
 
 
 		// **** CONTROLS ****
@@ -246,7 +261,8 @@ export class Battle extends Phaser.Scene {
 					this.abilityUsed = useAbility.apply(this, ['player'])
 					// If the defending monster dies from the attack
 					if (this.abilityUsed) {
-						state.currentBattleMenu = 'enemyMonsterDeath'
+
+						enemyMonsterDeath.apply(this)
 					}
 					else {
 						state.currentBattleMenu = 'ability1Txt'
@@ -304,6 +320,11 @@ export class Battle extends Phaser.Scene {
 				this.hero.menuCursorPosition = 0
 				this.menuArrow.setPosition(this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][1], this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][2])
 				state.menuItemSelected = this.menuArrowPositions.mainMenu[this.hero.menuCursorPosition][0]
+			}
+
+			// Enemy monster death
+			else if (state.currentBattleMenu === 'enemyMonsterDeath') {
+				this.scene.start('PlayerView', {level: 'overworld1'})
 			}
 		}, this)
 
@@ -383,6 +404,26 @@ function useAbility(attacker){
 			return ['hero']
 		}
 	}
+}
+
+function enemyMonsterDeath(){
+	console.log(this)
+	this.enemyDeathText.setText(["You have killed " + this.enemy.currentMonster.name + ". ", this.hero.currentMonster.name + " has gained " + this.enemy.currentMonster.expReward + " experience."])
+	this.hero.currentMonster.currentExp = this.hero.currentMonster.currentExp  + this.enemy.currentMonster.expReward
+
+	// Level up
+	if (this.hero.currentMonster.currentExp >= this.hero.currentMonster.expToLevel){
+		let remainder = this.hero.currentMonster.currentExp - this.hero.currentMonster.expToLevel
+		this.hero.currentMonster.currentExp === remainder
+		this.hero.currentMonster.level = this.hero.currentMonster.level + 1
+
+		this.lvlUpText.setText(this.hero.currentMonster.name + ' has grown to LV. ' + this.hero.currentMonster.level + "!")
+		this.lvlUpTextContainer.visible = true
+	}
+
+	state.currentBattleMenu = 'enemyMonsterDeath'
+	this.battleTextContainer.visible = false
+	this.enemyDeathTextContainer.visible = true
 }
 
 

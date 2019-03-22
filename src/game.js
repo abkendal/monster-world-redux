@@ -20,7 +20,7 @@ const config = {
 		StartMonster,
 
 		// ***** DEBUG *****
-		PlayerView,
+		// PlayerView,
 		// ***** DEBUG *****
 		
 		Battle,
