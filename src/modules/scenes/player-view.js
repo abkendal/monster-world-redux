@@ -27,9 +27,12 @@ export class PlayerView extends Phaser.Scene {
 		let tilekey
 		let monsterLvl 
 		let monsters
+		this.walkable = true;
 
 		if (data.level === 'overworld1'){
-			music.morningSunlight.play()
+			music.wildEncounter.stop()
+			music.morningSunlight.play() 
+			
 			mapkey = 'map'
 			tilekey = 'overworld-grass-tiles'
 			monsterLvl = [1,2,3]
@@ -87,10 +90,11 @@ export class PlayerView extends Phaser.Scene {
 		})
 
 		// Tween encounter flash
-		const blackScreen = this.add.image(w / 2, h / 2, 'black')
-		blackScreen.alpha = 0
+		this.blackScreen = this.add.image(w / 2, h / 2, 'black')
+		this.blackScreen.alpha = 0
+
 		this.tween = this.tweens.add({
-			targets: blackScreen,
+			targets: this.blackScreen,
 			alpha: 1,
 			duration: 400,
 			ease: 'Linear',
@@ -125,9 +129,9 @@ export class PlayerView extends Phaser.Scene {
 
 		// Movement controls
 		// X velocity
-		if (this.cursors.left.isDown){
+		if (this.cursors.left.isDown && this.walkable == true){
 			player.body.setVelocityX(-this.playerSpeed)
-		}else if (this.cursors.right.isDown) {
+		} else if (this.cursors.right.isDown && this.walkable == true) {
 			player.body.setVelocityX(this.playerSpeed)
 		}
 		else {
@@ -135,14 +139,15 @@ export class PlayerView extends Phaser.Scene {
 		}
 
 		// Y velocity
-		if (this.cursors.up.isDown){
+		if (this.cursors.up.isDown && this.walkable == true){
 			player.body.setVelocityY(-this.playerSpeed)
-		} else if (this.cursors.down.isDown) {
+		} else if (this.cursors.down.isDown && this.walkable == true) {
 			player.body.setVelocityY(this.playerSpeed)
 		}
 		else {
 			player.body.setVelocityY(0)
 		}
+
 
 
 		// Player walking animation
@@ -173,10 +178,25 @@ export class PlayerView extends Phaser.Scene {
 
 			// Switch to encounter level if encounter triggered while walking 
 			if (state.startEncounter){
+				state.walking=false;
+				this.walkable = false;
+				
 				state.startEncounter = false
 				let music = this.scene.get('Music')
 				music.morningSunlight.stop()
 				music.wildEncounter.play()
+
+				var cameraX = this.cameras.main.scrollX;
+				var cameraY = this.cameras.main.scrollY;
+
+				
+				if (cameraX > 0) {
+					this.blackScreen.x = state.playerPosition.x
+				}
+				if (cameraY > 0){
+					this.blackScreen.y = state.playerPosition.y
+				}
+				
 				this.tween.play()
 				const timedEvent = this.time.delayedCall(2000, startEncounter, [], this);
 			}

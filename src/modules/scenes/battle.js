@@ -11,6 +11,7 @@ export class Battle extends Phaser.Scene {
 
 
 	create(data){
+		let music = this.scene.get('Music')
 		state.currentBattleMenu =  'main'
 		state.menuItemSelected = 'fight'
 		this.hero = {}
@@ -239,6 +240,7 @@ export class Battle extends Phaser.Scene {
 					state.menuItemSelected = this.menuArrowPositions.fightMenu[this.hero.menuCursorPosition][0]
 				}
 				else if (state.menuItemSelected === 'run'){
+					
 					this.scene.start('PlayerView', {level: 'overworld1'})
 				}
 			}
