@@ -183,7 +183,7 @@ export class Battle extends Phaser.Scene {
 		// Enemy dead text
 		this.lvlUpText = this.add.text(0, 0, '', fontStyle)
 
-		this.lvlUpTextContainer = this.add.container(30, h - 120, [this.lvlUpText])
+		this.lvlUpTextContainer = this.add.container(30, h - 50, [this.lvlUpText])
 		this.lvlUpTextContainer.visible = false
 
 
@@ -417,7 +417,7 @@ function enemyMonsterDeath(){
 	if (this.hero.currentMonster.currentExp >= this.hero.currentMonster.expToLevel){
 		let remainder = this.hero.currentMonster.currentExp - this.hero.currentMonster.expToLevel
 		this.hero.currentMonster.currentExp === remainder
-		this.hero.currentMonster.level = this.hero.currentMonster.level + 1
+		this.hero.currentMonster.levelUp();
 
 		this.lvlUpText.setText(this.hero.currentMonster.name + ' has grown to LV. ' + this.hero.currentMonster.level + "!")
 		this.lvlUpTextContainer.visible = true

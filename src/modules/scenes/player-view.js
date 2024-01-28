@@ -30,6 +30,8 @@ export class PlayerView extends Phaser.Scene {
 		this.walkable = true;
 
 		if (data.level === 'overworld1'){
+			console.log(state.monsterInv);
+			
 			music.wildEncounter.stop()
 			music.morningSunlight.play() 
 			
