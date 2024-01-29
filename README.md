@@ -1,6 +1,6 @@
-# Monster Hunter
+# Monster World
 
-This is a respository for the Monster Hunter browser game.
+This is a respository for the Monster World browser game.
 
 
 ## Build Setup
